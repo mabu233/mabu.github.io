@@ -1,152 +1,83 @@
-<!DOCTYPE HTML PUBLIC> 
-<html> 
- <head> 
- <meta charset="utf-8"> 
- <title>获取图片像素颜色,转换为css3 box-shadow</title> 
-  
- <style type="text/css"> 
- .css_code{margin:10px; padding:10px; display:none; border:1px solid #FFCC00; font-size:10px; background:#F1F1F1;  height:410px; overflow:auto;} 
-  .css_code:hover{ 
-    background:#DEFEDE; 
-  } 
- </style> 
-  <canvas style="width:auto;height:auto" id="canvas"></canvas>
- <script type="text/javascript"> 
- window.onload = function(){ 
-  
-  var canvas = document.getElementById('canvas'); 
-  var context = canvas.getContext('2d'); 
-  var css_code = document.getElementById('css_code'); 
- 
-  document.getElementById('img').onchange = function(){ 
-    var img = event.target.files[0]; 
-    // 检查图片类型 
-    if(!(img.type.indexOf('image')==0 && img.type && /\.(?:jpg|png|gif)$/.test(img.name)) ){ 
-      alert('图片只能是jpg,gif,png'); 
-      return ; 
-    } 
-    //alert(img.size);return;
-    // 检查图片尺寸 
-    if(img.size > 120*1024){ 
-      alert('图片不能大于120K'); 
-      return ; 
-    } 
- 
-    // file reader 
-    var reader = new FileReader(); 
-    reader.readAsDataURL(img); 
- 
-    reader.onload = function(e){ // reader onload start 
- 
-      var image = new Image(); 
-      image.src = e.target.result; 
- 
-      image.onload = function(){ // image onload start 
- 
-        var img_width = this.width; 
-        var img_height = this.height; 
- 
-        // 设置画布尺寸 
-        canvas.width = img_width; 
-        canvas.height = img_height; 
-        // 将图片按像素写入画布 
-        context.drawImage(this, 0, 0, img_width, img_height); 
- 
-        // 读取图片像素信息 
-        var imageData = context.getImageData(0, 0, img_width, img_height); 
- 
-        var arrbox = [], 
-        length = imageData.data.length; 
-       // document.write('_');
-        for(var i=0; i<length; i++){ 
- 
-          if(i%4 === 0){ // 每四个元素为一个像素数据 r,g,b,alpha 
-            var alpha = Math.round(imageData.data[i+3]/255*100)/100; // alpha 值 
-            if(i/4%img_width == 0){
-                    arrbox.push('<br />');
-                 // hex = 'f00'
-             }
-            
-            if(imageData.data[i+3]==255){ // 没有alpha 值 
-              var hex = gethex(imageData.data[i], imageData.data[i+1], imageData.data[i+2]); 
-              if(hex == '000000'){
-                 arrbox.push(0);
-                //createDiv(i/4,img_width,'#000000');
-              }else if(hex == 'ffffff'){
-                 arrbox.push(1);
-              // createDiv(i/4,img_width,'#ffffff');
-              }else {
-                arrbox.push(0);
-               // createDiv(i/4,img_width,'#000000');
-              }
-              
-             // arrbox.push(x + 'px ' + y + 'px #' + hex); 
-            }else { // 有alpha 值 
-                arrbox.push(1);
-             // createDiv(i/4,img_width,'red');
-            //  var rgba = imageData.data[i] + ',' + imageData.data[i+1] + ',' + imageData.data[i+2] + ',' + alpha; 
-            //  arrbox.push(x + 'px ' + y + 'px rgba(' + rgba + ')'); 
-            } 
- 
-          } 
-        } 
- //return;
- 
- 
-        // 输出CSS3 box-shadow 
-        css_code.style.display = 'block'; 
-       //css_code.innerHTML = 'box-shadow: ' + arrbox.join(','); 
-       css_code.innerHTML = arrbox.join(''); 
-         
-        // 获取16进制颜色 
-        function gethex(r,g,b){ 
-          if(r == g && g == b && r < 150){
-              r = g = b = 0;
-          }
-          r = r.toString(16); 
-          g = g.toString(16); 
-          b = b.toString(16); 
- 
-          // 补0 
-          r.length==1? r = '0' + r : ''; 
-          g.length==1? g = '0' + g : ''; 
-          b.length==1? b = '0' + b : ''; 
- 
-          var hex = r + g + b; 
- 
-          // 简化处理,如 FFEEDD 可以写为 FED 
-          if(r.slice(0,1)==r.slice(1,1) && g.slice(0,1)==g.slice(1,1) && b.slice(0,1)==b.slice(1,1)){ 
-            hex = r.slice(0,1) + g.slice(0,1) + b.slice(0,1); 
-          } 
- 
-          return hex; 
-        } 
-        // 创建div
-        function createDiv(i,w,c){
-          var div = document.createElement('div');
-          if(c == 'red')
-            div.className = 'div';
-          div.style.width = '1px';
-          div.style.height = '1px';
-          div.style.left = i%w + 100 + 'px';
-          div.style.top = parseInt(i/w) + 100 + 'px';
-          div.style.position = 'absolute';
-          div.style.backgroundColor = c;
-          document.body.appendChild(div);
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>fuckjsfuck</title>
+    <meta charset="utf-8">
+</head>
+
+<body style="margin-top: 5px;margin-left: 10px">
+    <button id="run" style="position: absolute;left:2%;">运行</button>
+    <textarea id="code" style="position: absolute;left:2%;top:30px;height:600px;width:45%;border: 1px solid #000;"></textarea>
+    <div id="show" style="position: absolute;left:50%;top:30px;height:600px;width:45%;border: 1px solid #000;"></div>
+    <script type="text/javascript">
+
+    var index = 1, code = '';
+    document.getElementById('run').addEventListener('click', function() {
+        index = 1;
+        code = document.getElementById('code').value;
+        var res = parse('', true);
+        console.log(res);
+    	document.getElementById('show').innerHTML = res;
+    });
+    function parse(tmp = '', begin) {
+        if (begin) {
+            code = '[' + code + ']';
+            tmp = '[';
         }
- 
-      } // image onload end 
-     
-    } // reader onload end 
-  } 
-  
- } 
- </script> 
- 
- </head> 
- 
- <body> 
- <input type="file" id="img">
- <div class="css_code" id="css_code"></div> 
- </body> 
-</html> 
+        var type = tmp == '[' ? ']' : ')';
+        var is_eval = true;
+        while (1) {
+            var current_ch = code[index++];
+            if (current_ch == '[' || current_ch == '(') {
+                let res = parse(current_ch);
+                tmp += res;
+                if (res == '[]' || res == '[[]]' || res == '()') {} else {
+                    // is_eval = false;
+                }
+            } else if (current_ch == type) {
+                tmp += type;
+                if (tmp == '[]' || tmp == '()') return tmp;
+                if (tmp == '[[]]')
+                    return tmp;
+                if (is_eval) {
+                    if (begin) {
+                        begin;
+                    }
+                    if (/^\[.*\]$/.test(tmp)) {
+                        tmp = tmp.replace(/^\[(.*)\]$/, '$1');
+                        try {
+                            tmp = "['" + eval(tmp) + "']";
+                        } catch (e) {
+                            tmp;
+                        }
+                        return tmp;
+                    }
+                    if (/^\(.*\)$/.test(tmp)) {
+                        //location 替换处理
+                        // tmp = tmp.replace("([]+[]['sort']['constructor']('return location')())",`${location}`);
+                        try {
+                            if (Number.isInteger(Number((eval(tmp)))) && eval(tmp) !== '' && !/\.|\+|e/.test(eval(tmp))) {
+                                var res_tmp = "(" + eval(tmp) + ")";
+                            } else {
+                                var res_tmp = "('" + eval(tmp) + "')";
+                            }
+                        } catch (e) {
+                            res_tmp = tmp;
+                        }
+                        return res_tmp;
+                    }
+                    var res_tmp = "'" + eval(tmp) + "'";
+                    return res_tmp;
+                } else {
+                    return tmp;
+                }
+            } else {
+                tmp += current_ch;
+            }
+        }
+    }
+    </script>
+</body>
+
+</html>
