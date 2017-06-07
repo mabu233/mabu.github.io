@@ -9,6 +9,8 @@
 <body style="margin-top: 5px;margin-left: 10px">
     <button id="run" style="position: absolute;left:2%;">运行</button>
     <a style="margin-left:250px" href="https://github.com/mabu233/mabu233.github.io/blob/master/fuckjsfuck_nodejs.js">nodejs 环境的</a>
+    <a style="margin-left:100px" target="_blank" href="http://www.jsfuck.com/">jsfuck</a>
+    <a style="margin-left:100px" href="#">控制台有输出</a>
     <textarea id="code" style="position: absolute;left:2%;top:30px;height:600px;width:45%;border: 1px solid #000;"></textarea>
     <div id="show" style="position: absolute;left:50%;top:30px;height:600px;width:45%;border: 1px solid #000;"></div>
     <script type="text/javascript">
@@ -48,6 +50,7 @@
                             if(!begin){
                                 tmp = "['" +eval(tmp) +"']";
                             }else {
+                                console.log(tmp);
                                 tmp = eval(tmp);
                             }
                         } catch (e) {
