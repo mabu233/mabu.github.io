@@ -27,13 +27,14 @@ function parse(tmp = '', begin){
             if(tmp == '[[]]')
                 return tmp;
             if(is_eval){
-                if(begin){
-                    begin;
-                }
                 if(/^\[.*\]$/.test(tmp)){
                     tmp = tmp.replace(/^\[(.*)\]$/,'$1');
                     try{
-                        tmp = "['" +eval(tmp) +"']";
+                        if(!begin){
+                            tmp = "['" +eval(tmp) +"']";
+                        }else {
+                            tmp = eval(tmp);
+                        }
                     }catch(e){
                         tmp;
                     }
