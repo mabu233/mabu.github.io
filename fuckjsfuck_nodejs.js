@@ -1,5 +1,6 @@
 var code = '(+(+!+[]+(!+[]+[])[!+[]+!+[]+!+[]]+[+!+[]]+[+[]]+[+[]])+[])[2]';
 
+//用到了 浏览器端 对象, 解不出来, 可以....
 //一些window 环境变量 nodejs 没有的,先定义
 // var location = '"https://mlizu.com/newfile.php"';
 var index = 1;
