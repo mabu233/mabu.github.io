@@ -9,6 +9,7 @@ char* reverse(char* str);
 int main(){
     char str[12] = "hello,world";
     printf("%s\n", reverse(str));
+    return 0;
 }
 
 char* reverse(char* str){
