@@ -33,6 +33,10 @@ void name([INTERNAL_FUNCTION_PARAMETERS](#internal_function_parameters))
 #### `ZEND_MALIAS(classname,name,alias,arg_info,flags)`
 [ZEND_FENTRY](#zend_fentryzend_namenamearg_infoflags)(name, [ZEND_MN](#zend_mnname)(classname##_##(name|alias)), arg_info, flags)  <br/>
 **展开** &nbsp; `{ "方法名", zim_classname_name, arg_info, (uint32_t) (sizeof(arg_info)/sizeof(struct _zend_internal_arg_info)-1), flags },`
+<br/><br/>
 
 #### `INIT_CLASS_ENTRY(class_container,class_name,functions)`
 **初始化类** &nbsp; INIT_OVERLOADED_CLASS_ENTRY(class_container, class_name, functions, NULL, NULL, NULL)
+
+#### `zend_register_internal_class(zend_class_entry *class_entry)`
+**注册类** &nbsp; do_register_internal_class &nbsp; zend_API.c:2704
