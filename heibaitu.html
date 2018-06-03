@@ -1,0 +1,101 @@
+<html>
+<head>
+    
+    <style>
+        canvas {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+直接复制图片可能不行，请右键另存为。
+</body>
+<script>   
+        
+    var img1 = document.createElement('img');
+    img1.src = './1.png';
+    var img2 = document.createElement('img');
+    img2.src = './2.png';
+    var status = 0;
+    img1.onload = function(){
+        status++;
+        if(status == 2){
+            build();
+        }
+    }
+    img2.onload = function(){
+        status++;
+        if(status == 2){
+            build();
+        }
+    }
+    
+    function build(){
+        let width  = 300;
+        let height = 300;
+        
+        let canvas_1 = new_canvas(width, height, img1);
+        let canvas_2 = new_canvas(width, height, img2);
+        let canvas_3 = new_canvas(width, height);
+        getContext(canvas_3).clearRect(0, 0, width, height);
+        
+        //getContext(canvas_1).fillStyle = 'rgb(0,0,0)';
+        //getContext(canvas_1).fillRect(50, 50, 50, 50);
+        
+        //getContext(canvas_2).fillStyle = 'rgb(0,0,0)';
+        //getContext(canvas_2).fillRect(200, 50, 50, 50);
+        
+        let imgData_1 = getContext(canvas_1).getImageData(0, 0, width, height).data;
+        let imgData_2 = getContext(canvas_2).getImageData(0, 0, width, height).data;
+        
+        for(let y = 0; y < height; y++)
+            for(let x = 0; x < width; x++){
+                let r,g,b;
+                let blackPixel = (x + y) % 2 == 0 ? true : false;
+                if(blackPixel){
+                    r = imgData_1[x * 4 + y * width * 4];
+                    // g = imgData_1[x * 4 + 1 + y * width * 4];
+                    // b = imgData_1[x * 4 + 2 + y * width * 4];
+                    let a = (255-((r * 19595 + r * 38469 + r * 7472)>>16)).toString(16);
+                    if(a.length < 2){
+                        a = '0' + a;
+                    }
+                    // getContext(canvas_3).fillStyle = `rgba(0,0,0,${255-(gray>>16)})`;
+                    getContext(canvas_3).fillStyle = '#000000' + a;
+                    getContext(canvas_3).fillRect(x, y, 1, 1);
+                }else {
+                    r = imgData_2[x * 4 + y * width * 4];
+                    // g = imgData_2[x * 4 + 1 + y * width * 4];
+                    // b = imgData_2[x * 4 + 2 + y * width * 4];
+                    let a = ((r * 19595 + r * 38469 + r * 7472)>>16).toString(16);
+                    if(a.length < 2){
+                        a = '0' + a;
+                    }
+                    // getContext(canvas_3).fillStyle = `rgba(255,255,255,${gray>>16})`;
+                    getContext(canvas_3).fillStyle = '#FFFFFF' + a;
+                    getContext(canvas_3).fillRect(x, y, 1, 1);
+                }
+            }
+    }
+    
+        
+    function new_canvas(width = 300, height = 300, img){
+        let canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        document.body.append(canvas);
+        getContext(canvas).fillStyle = 'rgb(255,255,255)';
+        getContext(canvas).fillRect(0, 0, width, height);
+        if(img){
+            getContext(canvas).drawImage(img,0,0,width,height);
+        }
+        //getContext(canvas).clearRect(0, 0, width, height);
+        return canvas;
+    }
+    
+    function getContext(canvas){
+        return canvas.getContext('2d');
+    }
+    
+</script>
+</html>
